@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from notas.errores import SinNotasError
+from notas.errores import NotaDuplicadaError, SinNotasError
 from notas.modelo import Nota
 
 
@@ -20,11 +20,25 @@ class RegistroNotas:
     def registrar(self, *, materia: str, semestre: str, valor: float) -> Nota:
         """Crea una ``Nota`` y la agrega al registro.
 
-        La validacion de rango y tipo la realiza ``Nota`` (REQ-1).
+        Reglas combinadas:
+            - REQ-1: la validacion de rango y tipo la realiza ``Nota``.
+            - REQ-4: no se permite duplicar (materia, semestre); si ya existe
+              una nota para esa combinacion se lanza ``NotaDuplicadaError`` y
+              el estado del registro no cambia.
         """
+        if self._existe_duplicado(materia, semestre):
+            raise NotaDuplicadaError(
+                f"Ya existe una nota registrada para la materia '{materia}' "
+                f"en el semestre '{semestre}'."
+            )
         nota = Nota(materia=materia, semestre=semestre, valor=valor)
         self._notas.append(nota)
         return nota
+
+    def _existe_duplicado(self, materia: str, semestre: str) -> bool:
+        return any(
+            n.materia == materia and n.semestre == semestre for n in self._notas
+        )
 
     def promedio(self) -> float:
         """REQ-3: promedio aritmetico de las notas registradas."""

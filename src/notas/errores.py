@@ -23,3 +23,7 @@ class TipoDeNotaInvalidoError(ErrorDeDominio):
 
 class SinNotasError(ErrorDeDominio):
     """REQ-3: no se puede calcular el promedio si el registro esta vacio."""
+
+
+class NotaDuplicadaError(ErrorDeDominio):
+    """REQ-4: ya existe una nota para la misma (materia, semestre)."""
