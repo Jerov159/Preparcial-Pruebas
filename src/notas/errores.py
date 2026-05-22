@@ -19,3 +19,7 @@ class NotaFueraDeRangoError(ErrorDeDominio):
 
 class TipoDeNotaInvalidoError(ErrorDeDominio):
     """REQ-1: el valor de la nota debe ser numerico (int o float real)."""
+
+
+class SinNotasError(ErrorDeDominio):
+    """REQ-3: no se puede calcular el promedio si el registro esta vacio."""
