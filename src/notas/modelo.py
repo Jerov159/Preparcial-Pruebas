@@ -9,6 +9,7 @@ from notas.errores import NotaFueraDeRangoError, TipoDeNotaInvalidoError
 
 NOTA_MINIMA: float = 0.0
 NOTA_MAXIMA: float = 5.0
+UMBRAL_APROBACION: float = 3.0
 
 
 @dataclass(frozen=True)
@@ -28,6 +29,10 @@ class Nota:
     def __post_init__(self) -> None:
         _validar_tipo(self.valor)
         _validar_rango(self.valor)
+
+    def aprueba(self) -> bool:
+        """REQ-2: la nota aprueba si es mayor o igual a ``UMBRAL_APROBACION``."""
+        return self.valor >= UMBRAL_APROBACION
 
 
 def _validar_tipo(valor: object) -> None:
